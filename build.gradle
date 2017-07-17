@@ -1,15 +1,71 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+ext {
+    //Author
+    developerId = "davideas"
+    developerName = "Davide Steduto"
+    developerEmail = "dave.dna@gmail.com"
+
+    //Library
+    libraryCode = 15
+    libraryVersion = "5.0.0-SNAPSHOT"
+    libraryDate = " of 2016.04.17"
+    libraryDescription = "1 Adapter for SelectionMode, ViewHolders, Filter, FastScroller, Animations, Undo, Headers, Expandable, Draggable, Swipeable :-)"
+    libraryName = "FlexibleAdapter"
+    packageExt = "aar"
+
+    //Library Repository
+    bintrayRepo = "maven"
+    bintrayName = "flexible-adapter"
+    publishedGroupId = "eu.davidea"
+    artifact = bintrayName
+    siteUrl = "https://github.com/davideas/FlexibleAdapter"
+    gitUrl = "https://github.com/davideas/FlexibleAdapter.git"
+
+    //Support and Build tools version
+    minSdk = 14
+    targetSdk = 25
+    buildTools = "26.0.0"
+    supportLib = "25.3.1"
+
+    //Support Libraries dependencies
+    supportDependencies = [
+            design       : "com.android.support:design:${supportLib}",
+            recyclerview : "com.android.support:recyclerview-v7:${supportLib}",
+            cardview     : "com.android.support:cardview-v7:${supportLib}",
+            appcompat    : "com.android.support:appcompat-v7:${supportLib}",
+            customtabs   : "com.android.support:customtabs:${supportLib}",
+            support      : "com.android.support:support-v4:${supportLib}",
+            annotations  : "com.android.support:support-annotations:${supportLib}",
+            percent      : "com.android.support:percent:${supportLib}",
+            gridlayout   : "com.android.support:gridlayout-v7:${supportLib}"
+    ]
+
+    licenseName = "The Apache Software License, Version 2.0"
+    licenseUrl = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+    allLicenses = ["Apache-2.0"]
+    licenseDist = "repo"
+}
 buildscript {
     repositories {
         jcenter()
+//        mavenCentral()
+        maven {url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+//
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
+//        mavenCentral()
+        maven {url 'https://maven.google.com'}
+        maven {
+            url 'http://maven.aliyun.com/nexus/content/repositories/releases/'
+        }
     }
 }

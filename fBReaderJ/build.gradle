@@ -1,4 +1,46 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+buildscript {
+    repositories {
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.21.6'
+    }
+}
+
+
+tasks.whenTaskAdded { task ->
+    if (task.name.equals("lint")) {
+        task.enabled = false
+    }
+}
+
+//定义变量
+//gradle 可以用def定义一些值例如：def KeyPassword = "123123"
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
+def buildTime() {
+    return new Date().format("yyyy-MM-dd HH:mm:ss")
+}
+
+def hostName() {//输出jay@deepin，这是我的电脑的用户名和PC名
+    return System.getProperty("user.name") + "@" +InetAddress.localHost.hostName
+}
+
+def revision() {// 输出3dd5823, 这是最后一次commit的sha值
+    def code = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = code
+    }
+    return code.toString()
+}
 
 android {
     compileSdkVersion 25
@@ -8,7 +50,14 @@ android {
         applicationId "org.geometerplus.zlibrary.ui.android"
         minSdkVersion 14
         targetSdkVersion 19
-
+//        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+        resValue "string", "build_time", buildTime()
+        resValue "string", "build_host", hostName()
+        resValue "string", "build_revision", revision()
+//        ndk {
+//            abiFilters 'armeabi'//, 'x86'
+//        }
         ndk {
             moduleName "DeflatingDecompressor-v3"
         }
@@ -31,6 +80,105 @@ android {
             path 'src/main/jni/Android.mk'
         }
     }
+
+    // 批量打包
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                def fileName
+//                if (variant.buildType.name.equals('release')) {
+//                    // myAPP_v版本号_渠道名.apk
+//                    fileName = "master_v${variant.versionName}_${variant.productFlavors[0].name}_${variant.buildType.name}.apk"
+//                } else {
+//                    // myAPP_v版本号_渠道名_时间_编译类型名.apk _${releaseTime()}
+//                    fileName = "master_v${variant.versionName}_${variant.productFlavors[0].name}_${variant.buildType.name}.apk"
+//                }
+                fileName = "${variant.productFlavors[0].name}_v${variant.versionName}_${variant.buildType.name}.apk"//_${buildTime()}
+                output.outputFile = new File(outputFile.parent + "/${variant.buildType.name}", fileName)
+            }
+        }
+    }
+
+    signingConfigs {
+        def Properties localProps = new Properties()
+        localProps.load(new FileInputStream(file('../local.properties')))
+        def Properties keyProps = new Properties()
+        if (localProps['keystore.props.file']) {
+            keyProps.load(new FileInputStream(file(localProps['keystore.props.file'])))
+        } else {
+            keyProps["store"] = '../debug.keystore'
+            keyProps["alias"] = 'android'
+            keyProps["storePass"] = 'androiddebugkey'
+            keyProps["pass"] = 'android'
+        }
+
+        debug {
+            storeFile file(keyProps["store"])
+            keyAlias keyProps["alias"]
+            storePassword keyProps["storePass"]
+            keyPassword keyProps["pass"]
+        }
+
+        release {
+            assert localProps['keystore.props.file'];
+            storeFile file(keyProps["store"])
+            keyAlias keyProps["alias"]
+            storePassword keyProps["storePass"]
+            keyPassword keyProps["pass"]
+        }
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.debug
+        }
+    }
+    lintOptions {
+        abortOnError false
+
+    }
+    dataBinding {
+        enabled = true
+    }
+
+    productFlavors {
+        reader {
+            applicationId 'com.hfut235.reader.debug'
+            resValue 'string', 'application_package', applicationId
+            versionCode 10000
+            versionName '1.0.0'
+            manifestPlaceholders = [JPUSH_APPKEY : "c2e27730f08a0c1e8e05ab51", BAIDU_APPKEY: "gKx3rrTtRT0pMd42W3VVOFovuRf8eGuI", BaiduMobAd_STAT_ID: "48ae76de3f",
+                                    FABRIC_APPKEY: "921cacae210682fae113562bbf50304a7e3e22be"]
+        }
+        wenjiao {
+            applicationId 'com.hfut235.reader'
+            resValue 'string', 'application_package', applicationId
+            versionCode 10000
+            versionName '1.0.0'
+            manifestPlaceholders = [JPUSH_APPKEY : "f97d5c7e3a0c14bac8c5492c", BAIDU_APPKEY: "hUlW25xy5xguQkyZ86UZzVnP", BaiduMobAd_STAT_ID: "48ae76de3f",
+                                    FABRIC_APPKEY: "921cacae210682fae113562bbf50304a7e3e22be"]
+        }
+    }
+}
+
+repositories {
+    jcenter()
+    maven { url "https://maven.fabric.io/repo" }
+    maven { url 'https://maven.fabric.io/public' }
+    flatDir {
+        dirs 'libs' //this way we can find the .aar file in libs folder
+    }
+//    maven { url = "http://dl.bintray.com/davideas/maven" }
+//    maven {url = "https://oss.sonatype.org/content/repositories/snapshots/" } //For Snapshots
 }
 
 dependencies {
@@ -38,11 +186,15 @@ dependencies {
     compile project(':library')
     compile project(':code')
     compile project(':superToasts')
-    compile 'com.android.support:support-v4:25.3.1'
+//    compile project(':ttslibrary')
+    compile supportDependencies.support
     compile files('libs/LingvoIntegration_2.5.2.12.jar')
     compile files('libs/httpmime-4.2.5.jar')
     compile files('libs/json-simple-1.1.1.jar')
     compile files('libs/nanohttpd-2.0.5.jar')
     compile files('libs/open-dictionary-api-1.2.1.jar')
     compile files('libs/pdfparse.jar')
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true;
+    }
 }

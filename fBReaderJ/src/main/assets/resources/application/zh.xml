@@ -260,7 +260,7 @@
 		<node name="returnTo" value="返回到…"/>
 		<node name="back" value="后退"/>
 		<node name="forward" value="前进"/>
-		<node name="close" value="关闭FBReader"/>
+		<node name="close" value="关闭阅读器"/>
 	</node>
 	<node name="style" value="样式 %s"/>
 	<node name="editStyle" value="编辑样式">
@@ -859,7 +859,7 @@
 				<node name="cancelMenu" value="显示取消菜单"/>
 			</node>
 			<node name="backKeyLongPressAction" value="长按回退键动作设定">
-				<node name="exit" value="关闭FBReader"/>
+				<node name="exit" value="关闭阅读器"/>
 				<node name="goBack" value="后退到前一个界面"/>
 				<node name="cancelMenu" value="显示取消菜单"/>
 				<node name="none" value="不做任何事"/>

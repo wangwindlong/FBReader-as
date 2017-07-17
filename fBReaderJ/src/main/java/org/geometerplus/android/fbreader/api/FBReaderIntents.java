@@ -22,9 +22,10 @@ package org.geometerplus.android.fbreader.api;
 import android.content.Intent;
 
 import org.geometerplus.fbreader.book.*;
+import org.geometerplus.zlibrary.ui.android.BuildConfig;
 
 public abstract class FBReaderIntents {
-	public static final String DEFAULT_PACKAGE = "org.geometerplus.zlibrary.ui.android";
+	public static final String DEFAULT_PACKAGE = BuildConfig.APPLICATION_ID;//"org.geometerplus.zlibrary.ui.android";
 
 	public interface Action {
 		String API                              = "android.fbreader.action.API";

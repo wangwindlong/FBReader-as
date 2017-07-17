@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">FBReader</string>
+	<string name="app_name">文道阅读</string>
 	<string name="empty_string"></string>
+	<string name="title">文道阅读语音插件</string>
+	<string name="initializing">正在初始化&#8230;</string>
+	<string name="failure">初始化失败，抱歉</string>
+	<string name="speak_menu_item">朗读</string>
+	<string name="no_tts_installed">连接不上设备的语音引擎</string>
+	<string name="initialization_error">找不到阅读器中的数据</string>
+	<string name="language_is_not_set">书籍语言还没设置，正在尝试用%0阅读。</string>
+	<!--Text-to-speech data for %0 are not installed. Trying to read book in %1.-->
+	<string name="no_data_for_language" formatted="false">%0转语音数据还没安装。尝试从1%开始朗读</string>
+	<string name="speed">速率:</string>
 </resources>

@@ -4,13 +4,10 @@
 
 package org.geometerplus.android.fbreader.api;
 
-import java.io.Serializable;
 import java.util.*;
 
 import android.content.*;
-import android.graphics.Bitmap;
 import android.os.IBinder;
-import android.os.Parcelable;
 
 public class ApiClientImplementation implements ServiceConnection, Api, ApiMethods {
 	public static interface ConnectionListener {
@@ -55,16 +52,10 @@ public class ApiClientImplementation implements ServiceConnection, Api, ApiMetho
 		connect();
 	}
 
-//	public ApiClientImplementation(Context context, ConnectionListener listener) {
-//		myContext = context;
-//		myListener = listener;
-//		connect();
-//	}
-
 	public synchronized void connect() {
 		if (myInterface == null) {
-			myContext.bindService(FBReaderIntents.defaultInternalIntent(FBReaderIntents.Action.API), this, Context.BIND_AUTO_CREATE);
-			myContext.registerReceiver(myEventReceiver, new IntentFilter(FBReaderIntents.Action.API_CALLBACK));
+			myContext.bindService(new Intent(myPrefix + ACTION_API_POSTFIX), this, Context.BIND_AUTO_CREATE);
+			myContext.registerReceiver(myEventReceiver, new IntentFilter(myPrefix + ACTION_API_CALLBACK_POSTFIX));
 		}
 	}
 
@@ -96,10 +87,6 @@ public class ApiClientImplementation implements ServiceConnection, Api, ApiMetho
 
 	public synchronized void onServiceDisconnected(ComponentName name) {
 		myInterface = null;
-	}
-
-	public synchronized boolean isConnected() {
-		return myInterface != null;
 	}
 
 	private synchronized void checkConnection() throws ApiException {
@@ -160,14 +147,6 @@ public class ApiClientImplementation implements ServiceConnection, Api, ApiMetho
 		return ((ApiObject.Integer)object).Value;
 	}
 
-	private float requestFloat(int method, ApiObject[] params) throws ApiException {
-		final ApiObject object = request(method, params);
-		if (!(object instanceof ApiObject.Float)) {
-			throw new ApiException("Cannot cast return type of method " + method + " to float");
-		}
-		return ((ApiObject.Float)object).Value;
-	}
-
 	private boolean requestBoolean(int method, ApiObject[] params) throws ApiException {
 		final ApiObject object = request(method, params);
 		if (!(object instanceof ApiObject.Boolean)) {
@@ -184,14 +163,6 @@ public class ApiClientImplementation implements ServiceConnection, Api, ApiMetho
 		return (TextPosition)object;
 	}
 
-	private <T extends Parcelable> T requestParcelable(int method, ApiObject[] params) throws ApiException {
-		final ApiObject object = request(method, params);
-		if (!(object instanceof ApiObject.Parcelable)) {
-			throw new ApiException("Cannot cast return type of method " + method + " to Parcelable");
-		}
-		return (T)((ApiObject.Parcelable)object).Value;
-	}
-
 	private List<String> requestStringList(int method, ApiObject[] params) throws ApiException {
 		final List<ApiObject> list = requestList(method, params);
 		final ArrayList<String> stringList = new ArrayList<String>(list.size());
@@ -202,18 +173,6 @@ public class ApiClientImplementation implements ServiceConnection, Api, ApiMetho
 			stringList.add(((ApiObject.String)object).Value);
 		}
 		return stringList;
-	}
-
-	private <T extends Serializable> List<T> requestSerializableList(int method, ApiObject[] params) throws ApiException {
-		final List<ApiObject> list = requestList(method, params);
-		final ArrayList<T> serializableList = new ArrayList<T>(list.size());
-		for (ApiObject object : list) {
-			if (!(object instanceof ApiObject.Serializable)) {
-				throw new ApiException("Cannot cast an element returned from method " + method + " to Serializable");
-			}
-			serializableList.add((T)((ApiObject.Serializable)object).Value);
-		}
-		return serializableList;
 	}
 
 	private List<Integer> requestIntegerList(int method, ApiObject[] params) throws ApiException {
@@ -238,25 +197,12 @@ public class ApiClientImplementation implements ServiceConnection, Api, ApiMetho
 		return new ApiObject[] { ApiObject.envelope(value) };
 	}
 
-	private static ApiObject[] envelope(float value) {
-		return new ApiObject[] { ApiObject.envelope(value) };
-	}
-
 	private static ApiObject[] envelope(long value) {
 		return new ApiObject[] { ApiObject.envelope(value) };
 	}
 
 	private static ApiObject[] envelope(List<String> value) {
 		final ApiObject[] objects = new ApiObject[value.size()];
-		int index = 0;
-		for (String s : value) {
-			objects[index++] = ApiObject.envelope(s);
-		}
-		return objects;
-	}
-
-	private static ApiObject[] envelope(String[] value) {
-		final ApiObject[] objects = new ApiObject[value.length];
 		int index = 0;
 		for (String s : value) {
 			objects[index++] = ApiObject.envelope(s);
@@ -310,14 +256,6 @@ public class ApiClientImplementation implements ServiceConnection, Api, ApiMetho
 
 	public String getBookHash() throws ApiException {
 		return requestString(GET_BOOK_HASH, EMPTY_PARAMETERS);
-	}
-
-	public List<String> getBookAuthors() throws ApiException {
-		return requestStringList(LIST_BOOK_AUTHORS, EMPTY_PARAMETERS);
-	}
-
-	public float getBookProgress() throws ApiException {
-		return requestFloat(GET_BOOK_PROGRESS, EMPTY_PARAMETERS);
 	}
 
 	public String getBookUniqueId() throws ApiException {
@@ -505,17 +443,6 @@ public class ApiClientImplementation implements ServiceConnection, Api, ApiMetho
 		});
 	}
 
-	public String getTapActionByCoordinates(String name, int x, int y, int width, int height, String tap) throws ApiException {
-		return requestString(GET_TAP_ACTION_BY_COORDINATES, new ApiObject[] {
-			ApiObject.envelope(name),
-			ApiObject.envelope(x),
-			ApiObject.envelope(y),
-			ApiObject.envelope(width),
-			ApiObject.envelope(height),
-			ApiObject.envelope(tap)
-		});
-	}
-
 	public void setTapZoneAction(String name, int h, int v, boolean singleTap, String action) throws ApiException {
 		request(SET_TAPZONE_ACTION, new ApiObject[] {
 			ApiObject.envelope(name),
@@ -524,17 +451,5 @@ public class ApiClientImplementation implements ServiceConnection, Api, ApiMetho
 			ApiObject.envelope(singleTap),
 			ApiObject.envelope(action)
 		});
-	}
-
-	public List<MenuNode> getMainMenuContent() throws ApiException {
-		return requestSerializableList(GET_MAIN_MENU_CONTENT, EMPTY_PARAMETERS);
-	}
-
-	public String getResourceString(String ... keys) throws ApiException {
-		return requestString(GET_RESOURCE_STRING, envelope(keys));
-	}
-
-	public Bitmap getBitmap(int resourceId) throws ApiException {
-		return requestParcelable(GET_BITMAP, envelope(resourceId));
 	}
 }

@@ -60,6 +60,7 @@ android {
 //        }
         ndk {
             moduleName "DeflatingDecompressor-v3"
+            abiFilters 'armeabi'
         }
     }
 
@@ -194,6 +195,7 @@ dependencies {
     compile files('libs/nanohttpd-2.0.5.jar')
     compile files('libs/open-dictionary-api-1.2.1.jar')
     compile files('libs/pdfparse.jar')
+    compile files('libs/com.baidu.tts_2.3.0.jar')
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }

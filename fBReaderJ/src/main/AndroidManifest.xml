@@ -21,6 +21,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-feature android:name="android.hardware.bluetooth" android:required="false" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
     <application
         android:name="org.geometerplus.android.fbreader.FBReaderApplication"
@@ -665,7 +667,7 @@
         </receiver>
         <activity
             android:name="org.geometerplus.android.fbreader.plugin.tts.SpeakActivity"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@android:style/Theme.Dialog">
             <intent-filter>
                 <action android:name="android.fbreader.action.plugin.RUN" />
@@ -684,5 +686,39 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
+        <!-- tts_plus tts+-->
+        <!--android:theme="@style/Base.Theme.AppCompat.Dialog"-->
+        <!--<activity android:name="org.geometerplus.android.fbreader.plugin.tts.CmdActivity"-->
+            <!--android:theme="@android:style/Theme.Dialog"-->
+            <!--&gt;-->
+            <!--<intent-filter>-->
+                <!--<category android:name="android.intent.category.DEFAULT"/>-->
+                <!--<action android:name="com.hyperionics.fbreader.plugin.tts_plus.COPY_SPEECH_FILES" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
+
+        <!--&lt;!&ndash;<activity android:name="com.hyperionics.fbreader.plugin.tts_plus.SettingsActivity"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:theme="@android:style/Theme.Dialog">&ndash;&gt;-->
+        <!--&lt;!&ndash;</activity>&ndash;&gt;-->
+        <!--&lt;!&ndash;<service android:name="org.geometerplus.android.fbreader.plugin.tts.SpeakService"/>&ndash;&gt;-->
+        <!--<receiver android:name="org.geometerplus.android.fbreader.plugin.tts.MediaButtonIntentReceiver" android:enabled="false">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MEDIA_BUTTON" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+        <!--<receiver android:name="org.geometerplus.android.fbreader.plugin.tts.BluetoothConnectReceiver" android:enabled="false">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.bluetooth.device.action.ACL_DISCONNECTED"/>-->
+                <!--<action android:name="android.bluetooth.device.action.ACL_CONNECTED"/>-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+        <!--<receiver android:name="org.geometerplus.android.fbreader.plugin.tts.IncomingReceiver" android:enabled="true">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.hyperionics.fbreader.plugin.tts_plus.SVC_STARTED"></action>-->
+                <!--<action android:name="com.hyperionics.fbreader.plugin.tts_plus.API_CONNECTED"></action>-->
+                <!--<action android:name="com.hyperionics.fbreader.plugin.tts_plus.TTSP_KILL"></action>-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+
     </application>
 </manifest>

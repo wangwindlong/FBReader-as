@@ -14,4 +14,10 @@
 		android:scrollbarAlwaysDrawVerticalTrack="true"
 		android:fadeScrollbars="false"
 	/>
+	<include layout="@layout/control_panel"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+        android:visibility="gone"
+		/>
 </RelativeLayout>

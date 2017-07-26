@@ -24,15 +24,14 @@ import java.io.StringWriter;
 import java.util.*;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.*;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.*;
 import android.view.*;
 import android.widget.RelativeLayout;
 
+import org.geometerplus.android.fbreader.util.SimpleUtils;
 import org.geometerplus.zlibrary.core.application.ZLApplicationWindow;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.library.ZLibrary;
@@ -206,6 +205,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
+		SimpleUtils.initialTTSEnv();
 		bindService(
 			new Intent(this, DataService.class),
 			DataConnection,

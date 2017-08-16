@@ -82,18 +82,18 @@ final class TextSearchPopup extends PopupPanel implements View.OnClickListener {
 	}
 
 	public void onClick(View view) {
-		switch (view.getId()) {
-			case R.id.search_panel_previous:
-				Application.runAction(ActionCode.FIND_PREVIOUS);
-				break;
-			case R.id.search_panel_next:
-				Application.runAction(ActionCode.FIND_NEXT);
-				break;
-			case R.id.search_panel_close:
-				Application.runAction(ActionCode.CLEAR_FIND_RESULTS);
-				storePosition();
-				StartPosition = null;
-				Application.hideActivePopup();
+		int i = view.getId();
+		if (i == R.id.search_panel_previous) {
+			Application.runAction(ActionCode.FIND_PREVIOUS);
+
+		} else if (i == R.id.search_panel_next) {
+			Application.runAction(ActionCode.FIND_NEXT);
+
+		} else if (i == R.id.search_panel_close) {
+			Application.runAction(ActionCode.CLEAR_FIND_RESULTS);
+			storePosition();
+			StartPosition = null;
+			Application.hideActivePopup();
 		}
 	}
 }

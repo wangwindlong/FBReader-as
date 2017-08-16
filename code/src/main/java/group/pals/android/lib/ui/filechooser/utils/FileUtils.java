@@ -84,7 +84,7 @@ public class FileUtils {
                         return R.drawable.afc_folder_locked;
                     }
                 } else {
-                    return R.drawable.afc_folder;
+                    return R.drawable.afc_folder_normal;
                 }
             } else {
                 return R.drawable.afc_item_folder;

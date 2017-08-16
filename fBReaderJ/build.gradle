@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'io.fabric'
 
 buildscript {
@@ -44,10 +44,10 @@ def revision() {// 输出3dd5823, 这是最后一次commit的sha值
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "26.0.0"
+    buildToolsVersion buildTools
 
     defaultConfig {
-        applicationId "org.geometerplus.zlibrary.ui.android"
+//        applicationId "org.geometerplus.zlibrary.ui.android"
         minSdkVersion 14
         targetSdkVersion 19
 //        multiDexEnabled true
@@ -62,12 +62,14 @@ android {
             moduleName "DeflatingDecompressor-v3"
             abiFilters 'armeabi'
         }
+        manifestPlaceholders = [JPUSH_APPKEY : "f97d5c7e3a0c14bac8c5492c", BAIDU_APPKEY: "hUlW25xy5xguQkyZ86UZzVnP", BaiduMobAd_STAT_ID: "48ae76de3f",
+                                FABRIC_APPKEY: "921cacae210682fae113562bbf50304a7e3e22be"]
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     sourceSets {
@@ -83,23 +85,23 @@ android {
     }
 
     // 批量打包
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def outputFile = output.outputFile
-            if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                def fileName
-//                if (variant.buildType.name.equals('release')) {
-//                    // myAPP_v版本号_渠道名.apk
-//                    fileName = "master_v${variant.versionName}_${variant.productFlavors[0].name}_${variant.buildType.name}.apk"
-//                } else {
-//                    // myAPP_v版本号_渠道名_时间_编译类型名.apk _${releaseTime()}
-//                    fileName = "master_v${variant.versionName}_${variant.productFlavors[0].name}_${variant.buildType.name}.apk"
-//                }
-                fileName = "${variant.productFlavors[0].name}_v${variant.versionName}_${variant.buildType.name}.apk"//_${buildTime()}
-                output.outputFile = new File(outputFile.parent + "/${variant.buildType.name}", fileName)
-            }
-        }
-    }
+//    applicationVariants.all { variant ->
+//        variant.outputs.each { output ->
+//            def outputFile = output.outputFile
+//            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+//                def fileName
+////                if (variant.buildType.name.equals('release')) {
+////                    // myAPP_v版本号_渠道名.apk
+////                    fileName = "master_v${variant.versionName}_${variant.productFlavors[0].name}_${variant.buildType.name}.apk"
+////                } else {
+////                    // myAPP_v版本号_渠道名_时间_编译类型名.apk _${releaseTime()}
+////                    fileName = "master_v${variant.versionName}_${variant.productFlavors[0].name}_${variant.buildType.name}.apk"
+////                }
+//                fileName = "${variant.productFlavors[0].name}_v${variant.versionName}_${variant.buildType.name}.apk"//_${buildTime()}
+//                output.outputFile = new File(outputFile.parent + "/${variant.buildType.name}", fileName)
+//            }
+//        }
+//    }
 
     signingConfigs {
         def Properties localProps = new Properties()
@@ -145,30 +147,29 @@ android {
     }
     lintOptions {
         abortOnError false
-
     }
     dataBinding {
         enabled = true
     }
 
-    productFlavors {
-        reader {
-            applicationId 'com.hfut235.reader.debug'
-            resValue 'string', 'application_package', applicationId
-            versionCode 10000
-            versionName '1.0.0'
-            manifestPlaceholders = [JPUSH_APPKEY : "c2e27730f08a0c1e8e05ab51", BAIDU_APPKEY: "gKx3rrTtRT0pMd42W3VVOFovuRf8eGuI", BaiduMobAd_STAT_ID: "48ae76de3f",
-                                    FABRIC_APPKEY: "921cacae210682fae113562bbf50304a7e3e22be"]
-        }
-        wenjiao {
-            applicationId 'com.hfut235.reader'
-            resValue 'string', 'application_package', applicationId
-            versionCode 10000
-            versionName '1.0.0'
-            manifestPlaceholders = [JPUSH_APPKEY : "f97d5c7e3a0c14bac8c5492c", BAIDU_APPKEY: "hUlW25xy5xguQkyZ86UZzVnP", BaiduMobAd_STAT_ID: "48ae76de3f",
-                                    FABRIC_APPKEY: "921cacae210682fae113562bbf50304a7e3e22be"]
-        }
-    }
+//    productFlavors {
+//        reader {
+//            applicationId 'com.hfut235.reader.debug'
+//            resValue 'string', 'application_package', applicationId
+//            versionCode 10000
+//            versionName '1.0.0'
+//            manifestPlaceholders = [JPUSH_APPKEY : "c2e27730f08a0c1e8e05ab51", BAIDU_APPKEY: "gKx3rrTtRT0pMd42W3VVOFovuRf8eGuI", BaiduMobAd_STAT_ID: "48ae76de3f",
+//                                    FABRIC_APPKEY: "921cacae210682fae113562bbf50304a7e3e22be"]
+//        }
+//        wenjiao {
+//            applicationId 'com.hfut235.reader'
+//            resValue 'string', 'application_package', applicationId
+//            versionCode 10000
+//            versionName '1.0.0'
+//            manifestPlaceholders = [JPUSH_APPKEY : "f97d5c7e3a0c14bac8c5492c", BAIDU_APPKEY: "hUlW25xy5xguQkyZ86UZzVnP", BaiduMobAd_STAT_ID: "48ae76de3f",
+//                                    FABRIC_APPKEY: "921cacae210682fae113562bbf50304a7e3e22be"]
+//        }
+//    }
 }
 
 repositories {

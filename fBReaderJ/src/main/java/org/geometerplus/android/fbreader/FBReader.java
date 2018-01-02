@@ -28,6 +28,7 @@ import android.app.SearchManager;
 import android.content.*;
 import android.net.Uri;
 import android.os.*;
+import android.util.Log;
 import android.view.*;
 import android.widget.RelativeLayout;
 
@@ -68,6 +69,8 @@ import org.geometerplus.android.fbreader.sync.SyncOperations;
 import org.geometerplus.android.fbreader.tips.TipsActivity;
 
 import org.geometerplus.android.util.*;
+
+import static org.geometerplus.android.fbreader.api.FBReaderIntents.DEFAULT_PACKAGE;
 
 public final class FBReader extends FBReaderMainActivity implements ZLApplicationWindow {
 	public static final int RESULT_DO_NOTHING = RESULT_FIRST_USER;
@@ -998,7 +1001,8 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 			FBReaderIntents.Action.ERROR,
 			new Uri.Builder().scheme(exception.getClass().getSimpleName()).build()
 		);
-		intent.setPackage(FBReaderIntents.DEFAULT_PACKAGE);
+		Log.d("wangyl", "FBReader processException DEFAULT_PACKAGE=" + DEFAULT_PACKAGE);
+		intent.setPackage(DEFAULT_PACKAGE);
 		intent.putExtra(ErrorKeys.MESSAGE, exception.getMessage());
 		final StringWriter stackTrace = new StringWriter();
 		exception.printStackTrace(new PrintWriter(stackTrace));

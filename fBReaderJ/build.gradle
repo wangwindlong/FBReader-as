@@ -1,4 +1,5 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
+//apply plugin: 'com.android.library'
 apply plugin: 'io.fabric'
 
 buildscript {
@@ -8,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.21.6'
+        classpath 'io.fabric.tools:gradle:1.22.1'
     }
 }
 
@@ -43,7 +44,7 @@ def revision() {// 输出3dd5823, 这是最后一次commit的sha值
 }
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 27
     buildToolsVersion buildTools
 
     defaultConfig {
@@ -132,19 +133,19 @@ android {
         }
 
     }
-    buildTypes {
-        release {
-            minifyEnabled true
-            shrinkResources false
-            signingConfig signingConfigs.release
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            minifyEnabled false
-            shrinkResources false
-            signingConfig signingConfigs.debug
-        }
-    }
+//    buildTypes {
+//        release {
+//            minifyEnabled true
+//            shrinkResources false
+//            signingConfig signingConfigs.release
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//        }
+//        debug {
+//            minifyEnabled false
+//            shrinkResources false
+//            signingConfig signingConfigs.debug
+//        }
+//    }
     lintOptions {
         abortOnError false
     }
@@ -154,16 +155,16 @@ android {
 
 //    productFlavors {
 //        reader {
-//            applicationId 'com.hfut235.reader.debug'
-//            resValue 'string', 'application_package', applicationId
+////            applicationId 'com.hfut235.reader.debug'
+////            resValue 'string', 'application_package', applicationId
 //            versionCode 10000
 //            versionName '1.0.0'
 //            manifestPlaceholders = [JPUSH_APPKEY : "c2e27730f08a0c1e8e05ab51", BAIDU_APPKEY: "gKx3rrTtRT0pMd42W3VVOFovuRf8eGuI", BaiduMobAd_STAT_ID: "48ae76de3f",
 //                                    FABRIC_APPKEY: "921cacae210682fae113562bbf50304a7e3e22be"]
 //        }
 //        wenjiao {
-//            applicationId 'com.hfut235.reader'
-//            resValue 'string', 'application_package', applicationId
+////            applicationId 'com.hfut235.reader'
+////            resValue 'string', 'application_package', applicationId
 //            versionCode 10000
 //            versionName '1.0.0'
 //            manifestPlaceholders = [JPUSH_APPKEY : "f97d5c7e3a0c14bac8c5492c", BAIDU_APPKEY: "hUlW25xy5xguQkyZ86UZzVnP", BaiduMobAd_STAT_ID: "48ae76de3f",

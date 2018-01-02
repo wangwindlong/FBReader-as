@@ -1,0 +1,5 @@
+<resources>
+    <!--string、layout、drawable、dimen-->
+    <public name="afc_folder_normal" type="drawable"/>
+    <public name="afc_folder_disabled" type="drawable"/>
+</resources>
